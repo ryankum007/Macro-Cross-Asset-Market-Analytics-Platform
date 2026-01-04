@@ -12,7 +12,8 @@ def test_cli_run(monkeypatch, tmp_path):
     monkeypatch.setenv("MACRO_OUTPUT_DIR", str(tmp_path))
     get_settings.cache_clear()
 
-    csv_path = Path("data/sample_events.csv")
+    repo_root = Path(__file__).resolve().parents[1]
+    csv_path = repo_root / "data" / "sample_events.csv"
     result = runner.invoke(app, ["run", "--csv-path", str(csv_path), "--log-level", "WARNING"])
 
     assert result.exit_code == 0
@@ -26,4 +27,3 @@ def test_cli_show_config():
     result = runner.invoke(app, ["config"])
     assert result.exit_code == 0
     assert "tickers" in result.output
-
