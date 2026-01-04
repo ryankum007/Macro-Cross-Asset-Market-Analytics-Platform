@@ -15,7 +15,7 @@ def _resolve_csv_path(csv_path: Path) -> Path:
         return csv_path
 
     if not csv_path.is_absolute():
-        project_root = Path(__file__).resolve().parents[2]
+        project_root = Path(__file__).resolve().parents[3]
         candidate = project_root / csv_path
         if candidate.exists():
             return candidate
