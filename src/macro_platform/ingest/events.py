@@ -55,7 +55,10 @@ def load_events(path: Path) -> pd.DataFrame:
     return df
 
 
-def map_to_trading_day(events_df: pd.DataFrame, market_calendar_dates: Iterable[pd.Timestamp]) -> pd.DataFrame:
+def map_to_trading_day(
+    events_df: pd.DataFrame,
+    market_calendar_dates: Iterable[pd.Timestamp],
+) -> pd.DataFrame:
     """
     Map event release dates to the next available trading day.
 

@@ -1,5 +1,7 @@
 """Streamlit application to demo the macro platform end-to-end."""
 
+# ruff: noqa: E402, E501
+
 from __future__ import annotations
 
 import io
@@ -19,6 +21,7 @@ import streamlit as st
 
 from macro_platform.analytics.cross_asset import run_cross_asset_analytics
 from macro_platform.analytics.event_study import run_event_study
+
 try:
     from macro_platform.analytics.yield_curve import (
         BondSpec,
@@ -29,9 +32,11 @@ try:
 except ImportError:
     from macro_platform.analytics.yield_curve import (
         BondSpec,
-        _apply_scenario as apply_scenario,
         build_curve_from_fred,
         run_yield_curve_scenarios,
+    )
+    from macro_platform.analytics.yield_curve import (
+        _apply_scenario as apply_scenario,
     )
 from macro_platform.config import Settings, get_settings
 from macro_platform.ingest.events import load_events, map_to_trading_day
@@ -555,8 +560,8 @@ def page_yield_curve(fred_df: pd.DataFrame):
         st.markdown("### Scenario snapshot")
         st.write(
             f"""
-            **Scenario:** {scenario.title()} • **Magnitude:** {magnitude} bps  
-            **Bond:** {bond.maturity_years:.1f}Y @ {coupon:.2f}% coupon  
+            **Scenario:** {scenario.title()} • **Magnitude:** {magnitude} bps<br/>
+            **Bond:** {bond.maturity_years:.1f}Y @ {coupon:.2f}% coupon<br/>
             **As of:** {as_of}
             """
         )

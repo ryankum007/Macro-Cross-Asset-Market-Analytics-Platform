@@ -92,9 +92,10 @@ def _apply_scenario(curve: Curve, scenario: ScenarioType, magnitude_bps: float) 
     return apply_scenario(curve, scenario, magnitude_bps)
 
 
-def price_fixed_rate_bond(yield_percent: float, spec: BondSpec = BondSpec()) -> float:
+def price_fixed_rate_bond(yield_percent: float, spec: BondSpec | None = None) -> float:
     """Price a fixed-rate bond given yield in percent."""
 
+    spec = spec or BondSpec()
     y = yield_percent / 100
     periods = int(spec.maturity_years * spec.frequency)
     coupon = spec.coupon_rate * spec.face / spec.frequency
@@ -108,9 +109,10 @@ def price_fixed_rate_bond(yield_percent: float, spec: BondSpec = BondSpec()) -> 
     return float(present_values.sum())
 
 
-def bond_risk_measures(yield_percent: float, spec: BondSpec = BondSpec()) -> dict[str, float]:
+def bond_risk_measures(yield_percent: float, spec: BondSpec | None = None) -> dict[str, float]:
     """Compute price, DV01, modified duration, convexity via finite differences."""
 
+    spec = spec or BondSpec()
     base_price = price_fixed_rate_bond(yield_percent, spec)
     bump = 0.0001  # 1bp in decimal terms
 
@@ -153,10 +155,11 @@ def scenario_table(
 def scenario_pnl(
     base_curve: Curve,
     scenarios: Iterable[tuple[ScenarioType, float]],
-    bond: BondSpec = BondSpec(),
+    bond: BondSpec | None = None,
 ) -> pd.DataFrame:
     """Estimate PnL for the default bond using 10Y yield under each scenario."""
 
+    bond = bond or BondSpec()
     base_yield = base_curve["10Y"]
     base_measures = bond_risk_measures(base_yield, bond)
     base_price = base_measures["price"]
@@ -204,7 +207,7 @@ def run_yield_curve_scenarios(
     fred_df: pd.DataFrame,
     as_of: date,
     scenarios: Iterable[tuple[ScenarioType, float]],
-    bond: BondSpec = BondSpec(),
+    bond: BondSpec | None = None,
     output_dir: Path | None = None,
 ) -> tuple[pd.DataFrame, pd.DataFrame]:
     """
@@ -219,6 +222,7 @@ def run_yield_curve_scenarios(
     out_dir.mkdir(parents=True, exist_ok=True)
     plots_dir.mkdir(parents=True, exist_ok=True)
 
+    bond = bond or BondSpec()
     base_curve = build_curve_from_fred(fred_df, as_of)
     yields_df = scenario_table(base_curve, scenarios)
     pnl_df = scenario_pnl(base_curve, scenarios, bond)

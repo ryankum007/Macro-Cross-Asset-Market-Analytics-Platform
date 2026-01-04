@@ -15,7 +15,9 @@ class MarketUniverse(BaseModel):
     """Tickers and macro series covered by the platform."""
 
     tickers: list[str] = Field(default_factory=lambda: ["SPY", "TLT", "GLD"])
-    fred_series_ids: list[str] = Field(default_factory=lambda: ["DGS10", "T10Y2Y", "CPALTT01USM657N"])
+    fred_series_ids: list[str] = Field(
+        default_factory=lambda: ["DGS10", "T10Y2Y", "CPALTT01USM657N"]
+    )
 
 
 class DateRange(BaseModel):
@@ -51,4 +53,3 @@ def get_settings() -> Settings:
     settings.data_dir.mkdir(parents=True, exist_ok=True)
     settings.output_dir.mkdir(parents=True, exist_ok=True)
     return settings
-

@@ -14,17 +14,20 @@ from macro_platform.viz.plotting import plot_event_counts
 
 app = typer.Typer(help="Macro cross-asset analytics pipeline")
 
+CSV_PATH_OPTION = typer.Option(
+    None,
+    help="Path to event CSV. Defaults to bundled sample_events.csv.",
+)
+LOG_LEVEL_OPTION = typer.Option(
+    None,
+    help="Override log level (DEBUG, INFO, WARNING...).",
+)
+
 
 @app.command()
 def run(
-    csv_path: Path | None = typer.Option(
-        None,
-        help="Path to event CSV. Defaults to bundled sample_events.csv.",
-    ),
-    log_level: str | None = typer.Option(
-        None,
-        help="Override log level (DEBUG, INFO, WARNING...).",
-    ),
+    csv_path: Path | None = CSV_PATH_OPTION,
+    log_level: str | None = LOG_LEVEL_OPTION,
 ) -> None:
     """Run the ingest -> analytics -> visualization flow."""
 
@@ -53,4 +56,3 @@ def show_config() -> None:
 
 if __name__ == "__main__":
     app()
-

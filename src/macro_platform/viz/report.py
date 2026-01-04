@@ -11,11 +11,18 @@ import pandas as pd
 
 from macro_platform.analytics.cross_asset import run_cross_asset_analytics
 from macro_platform.analytics.event_study import run_event_study
+
 try:
-    from macro_platform.analytics.yield_curve import apply_scenario, build_curve_from_fred, run_yield_curve_scenarios
+    from macro_platform.analytics.yield_curve import (
+        apply_scenario,
+        build_curve_from_fred,
+        run_yield_curve_scenarios,
+    )
 except ImportError:
     from macro_platform.analytics.yield_curve import (
         _apply_scenario as apply_scenario,
+    )
+    from macro_platform.analytics.yield_curve import (
         build_curve_from_fred,
         run_yield_curve_scenarios,
     )
@@ -42,7 +49,11 @@ def generate_report(
     start_date: date | None = None,
     end_date: date | None = None,
     event_windows: Sequence[EventWindow] = ((-1, 3), (-3, 5), (0, 1)),
-    scenarios: Iterable[tuple[str, float]] = (("parallel", 25), ("steepener", 20), ("flattener", 20)),
+    scenarios: Iterable[tuple[str, float]] = (
+        ("parallel", 25),
+        ("steepener", 20),
+        ("flattener", 20),
+    ),
     output_dir: Path | None = None,
 ) -> None:
     """Run end-to-end analytics and save plots/CSVs to outputs/."""

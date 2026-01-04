@@ -103,7 +103,7 @@ def _detect_correlation_anomalies(corr_df: pd.DataFrame) -> pd.DataFrame:
     corr_df["zscore"] = np.nan
     corr_df["anomaly"] = False
 
-    for (pair, window), group in corr_df.groupby(["pair", "window"]):
+    for (_pair, _window), group in corr_df.groupby(["pair", "window"]):
         mean = group["rolling_corr"].mean()
         std = group["rolling_corr"].std()
         if std == 0 or np.isnan(std):
@@ -143,7 +143,7 @@ def run_pca(returns_wide: pd.DataFrame) -> pd.DataFrame:
 
     records = []
     for i, component in enumerate(loadings):
-        for asset, loading in zip(assets, component):
+        for asset, loading in zip(assets, component, strict=True):
             records.append(
                 {
                     "component": i + 1,

@@ -10,7 +10,12 @@ from macro_platform.analytics.cross_asset import (
 
 def _sample_market_data(dates: pd.DatetimeIndex) -> pd.DataFrame:
     rows = []
-    for asset_id, base in [("sp500", 0.001), ("vix", -0.0005), ("nasdaq", 0.0012), ("eurusd", 0.0003)]:
+    for asset_id, base in [
+        ("sp500", 0.001),
+        ("vix", -0.0005),
+        ("nasdaq", 0.0012),
+        ("eurusd", 0.0003),
+    ]:
         for i, dt in enumerate(dates):
             shock = 0.0001 * ((i % 5) - 2)  # deterministic variation
             rows.append({"date": dt, "asset_id": asset_id, "return_1d": base + shock})

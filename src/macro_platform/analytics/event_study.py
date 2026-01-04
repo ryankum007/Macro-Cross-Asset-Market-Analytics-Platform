@@ -38,7 +38,11 @@ def _prepare_market_returns(market_data: pd.DataFrame) -> dict[str, pd.Series]:
     return returns
 
 
-def _compute_cumulative_return(series: pd.Series, event_date: pd.Timestamp, window: Window) -> float | None:
+def _compute_cumulative_return(
+    series: pd.Series,
+    event_date: pd.Timestamp,
+    window: Window,
+) -> float | None:
     """Return cumulative return for a series in the provided window or None if invalid."""
     start_offset, end_offset = window
     if start_offset > end_offset:
@@ -139,7 +143,16 @@ def run_event_study(
         )
     else:
         summary_df = pd.DataFrame(
-            columns=["event_type", "asset_id", "window", "mean", "median", "std", "n", "pct_positive"]
+            columns=[
+                "event_type",
+                "asset_id",
+                "window",
+                "mean",
+                "median",
+                "std",
+                "n",
+                "pct_positive",
+            ]
         )
 
     summary_path = output_dir / "event_study_summary.csv"
@@ -200,7 +213,9 @@ def _plot_average_curves(
         if not any(curves[offset] for offset in offsets):
             continue
 
-        avg_curve = {offset: (pd.Series(vals).mean() if vals else None) for offset, vals in curves.items()}
+        avg_curve = {
+            offset: (pd.Series(vals).mean() if vals else None) for offset, vals in curves.items()
+        }
         xs = list(avg_curve.keys())
         ys = [avg_curve[x] for x in xs]
 
