@@ -12,8 +12,13 @@ def test_cli_run(monkeypatch, tmp_path):
     monkeypatch.setenv("MACRO_OUTPUT_DIR", str(tmp_path))
     get_settings.cache_clear()
 
-    repo_root = Path(__file__).resolve().parents[1]
-    csv_path = repo_root / "data" / "sample_events.csv"
+    csv_path = tmp_path / "sample_events.csv"
+    csv_path.write_text(
+        "date,ticker,event,impact\n"
+        "2024-01-15,SPY,Fed speech,medium\n"
+        "2024-02-01,TLT,CPI release,high\n",
+        encoding="utf-8",
+    )
     result = runner.invoke(app, ["run", "--csv-path", str(csv_path), "--log-level", "WARNING"])
 
     assert result.exit_code == 0
